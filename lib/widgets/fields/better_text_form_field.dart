@@ -57,6 +57,7 @@ class _BetterTextFormFieldState extends State<BetterTextFormField> {
   @override
   Widget build(BuildContext context) {
     final child = TextFormField(
+      enabled: widget.enabled,
       controller: controller,
       onFieldSubmitted: widget.onFieldSubmitted,
       obscureText: widget.obscureText,
@@ -77,17 +78,21 @@ class _BetterTextFormFieldState extends State<BetterTextFormField> {
 class BetterPasswordTextFormField extends StatefulWidget {
   const BetterPasswordTextFormField({
     super.key,
-    this.builder,
+    this.hintText,
     this.controller,
-    required this.enabled,
+    this.enabled = true,
     this.onFieldSubmitted,
+    this.builder,
   });
+
+  final String? hintText;
 
   /// Caso queira customizar
   final Widget Function(
     BuildContext context,
-    TextFormField child,
+    BetterTextFormField child,
     TextEditingController controller,
+    bool isObscure,
   )? builder;
 
   /// Um controller já é instanciado automaticamente
@@ -128,9 +133,8 @@ class _BetterPasswordTextFormFieldState
 
   @override
   Widget build(BuildContext context) {
-    return BetterTextFormField(
+    var child = BetterTextFormField(
       controller: controller,
-      builder: widget.builder,
       enabled: widget.enabled,
       onFieldSubmitted: widget.onFieldSubmitted,
       obscureText: obscureText,
@@ -139,5 +143,16 @@ class _BetterPasswordTextFormFieldState
         icon: Icon(obscureText ? Icons.visibility : Icons.visibility_off),
       ),
     );
+
+    if (widget.builder != null) {
+      return widget.builder!(
+        context,
+        child,
+        controller,
+        obscureText,
+      );
+    }
+
+    return child;
   }
 }
