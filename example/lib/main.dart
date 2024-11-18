@@ -13,6 +13,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+
+ 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,6 +25,7 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Column(
           children: [
+            
             BetterTextFormField(
               builder: (context, child, controller) {
                 // O controller é implementado dentro do widget.

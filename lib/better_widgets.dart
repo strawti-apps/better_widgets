@@ -1,9 +1,8 @@
-import 'better_widgets_platform_interface.dart';
+// Builders
+export 'widgets/builders/better_loading_builder.dart';
 
-export 'package:better_widgets/widgets/fields/better_text_form_field.dart';
+// Fields
+export 'widgets/fields/better_text_form_field.dart';
 
-class BetterWidgets {
-  Future<String?> getPlatformVersion() {
-    return BetterWidgetsPlatform.instance.getPlatformVersion();
-  }
-}
+// Buttons
+export 'widgets/buttons/better_material_button.dart';

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class BetterMaterialButton extends StatefulWidget {
@@ -8,9 +10,9 @@ class BetterMaterialButton extends StatefulWidget {
     this.text,
     this.textWidget,
     required this.onPressed,
-    required this.isLoading,
+    this.isLoading = false,
     this.loadingWidget,
-    required this.isEnabled,
+    this.isEnabled = true,
   });
 
   final double? minWidth;
@@ -19,8 +21,8 @@ class BetterMaterialButton extends StatefulWidget {
   final String? text;
   final Widget? textWidget;
 
-  final void Function() onPressed;
-  final bool isLoading;
+  final FutureOr<void> Function() onPressed;
+  final bool? isLoading;
   final Widget? loadingWidget;
 
   final bool isEnabled;
@@ -30,18 +32,33 @@ class BetterMaterialButton extends StatefulWidget {
 }
 
 class _BetterMaterialButtonState extends State<BetterMaterialButton> {
+  bool autoIsLoading = false;
+  void changeAutoIsLoading(bool value) {
+    autoIsLoading = value;
+    setState(() {});
+  }
+
+  bool get isLoading => widget.isLoading == true || autoIsLoading;
+
   @override
   Widget build(BuildContext context) {
-    Widget child = widget.textWidget ?? widget.textWidget ?? const Text("");
+    Widget child =
+        widget.textWidget ?? widget.textWidget ?? Text(widget.text ?? "");
 
-    if (widget.isLoading) {
+    if (widget.isLoading ?? false) {
       child = widget.loadingWidget ?? const CircularProgressIndicator();
     }
 
     return MaterialButton(
       minWidth: widget.minWidth,
       height: widget.height,
-      onPressed: widget.isLoading || widget.isEnabled ? null : widget.onPressed,
+      onPressed: isLoading || widget.isEnabled == false
+          ? null
+          : () {
+              changeAutoIsLoading(true);
+              widget.onPressed();
+              changeAutoIsLoading(false);
+            },
       child: child,
     );
   }
